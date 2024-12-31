@@ -1,2 +1,2 @@
 # Visiarise preFinal
-A few changes more and then we can do deploy our official VisiARise website.
+A few changes more and then we can deploy our official VisiARise website.
