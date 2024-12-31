@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Meow+Script&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font-face declarations */
+@font-face {
+  font-family: 'Helvetica World';
+  src: local('Helvetica World Regular'), local('Helvetica-World-Regular'),
+    url('HelveticaWorld-Regular.woff2') format('woff2'),
+    url('HelveticaWorld-Regular.woff') format('woff'),
+    url('HelveticaWorld-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Helvetica World';
+  src: local('Helvetica World Bold'), local('Helvetica-World-Bold'),
+    url('HelveticaWorld-Bold.woff2') format('woff2'),
+    url('HelveticaWorld-Bold.woff') format('woff'),
+    url('HelveticaWorld-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/*Glowing effect*/
+@layer utilities {
+  @keyframes animate-glow {
+    0% {
+      background-position: -500%;
+    }
+    100% {
+      background-position: 500%;
+    }
+  }
+
+  .animate-glow {
+    background-size: 90%;
+    animation: animate-glow 5s linear infinite;
+  }
+}
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typing {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* Neon icon effect */
+.neon-icon {
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.5), 0 0 15px rgba(59, 130, 246, 0.7);
+}
+
+.neon-icon:hover {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.7), 0 0 20px rgba(59, 130, 246, 1);
+}
+
+/* Base styles for body and HTML */
+body, html {
+  overflow-x: hidden;
+  width: 100vw; /* Ensures content doesn’t extend beyond viewport width */
+  touch-action: manipulation;
+}
+
+/* Tailwind Custom Animations */
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 2s ease-out forwards;
+  }
+
+  .animate-fadeInUp {
+    animation: fadeInUp 2s ease-out forwards;
+  }
+
+  .animate-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .animate-typing {
+    animation: typing 4s steps(40) infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  /* Default Animation Styles */
+.animate-reveal-baseline {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.animate-reveal-left {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.animate-reveal-right {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in-out;
+}
+
+  /* Default Hidden State */
+  #services-header,
+  #services-subheader,
+  #work-with-us-button {
+  opacity: 0;
+  transform: translateY(20px); /* Or translateX(-20px/20px) for left/right */
+}
+}
