@@ -1,6 +1,6 @@
 const Hero = () => {
   return (
-    <div className="w-full md:h-screen sm:h-screen bg-black overflow-hidden relative">
+    <div className="w-full md:h-screen sm:h-[50vh] bg-black overflow-hidden relative">
       {/* Video element */}
       <video
         className="absolute w-full h-full object-contain md:object-cover md:object-center"

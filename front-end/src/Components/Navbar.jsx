@@ -1,7 +1,5 @@
-// Little Changes
-
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { db } from '../firebase'; // Adjust the path as necessary
@@ -13,12 +11,45 @@ import StarBorder from './starBorder';
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const cartList = useSelector((state) => state.cart.cartList);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const userEmail = useSelector((state) => state.auth.userEmail);
   const [userData, setUserData] = useState(null);
   const cartCount = cartList.length;
+  const navigate = useNavigate();
+  const dropdownRef = useRef(null); // For Services Dropdown
+  const userDropdownRef = useRef(null); // For User Profile Dropdown
 
+  // For Outside Click Events
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target) && isServicesOpen) {
+        setIsServicesOpen(false);
+      }
+    
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target) && isUserDropdownOpen) {
+        setIsUserDropdownOpen(false);
+      }
+    }
+
+    // Event Listeners
+    if (isUserDropdownOpen || isServicesOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    else
+    {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isUserDropdownOpen, isServicesOpen]);
+
+  // For User Authentication
   useEffect(() => {
     if (isAuthenticated && userEmail) {
       const fetchUserData = async () => {
@@ -33,20 +64,226 @@ const Navbar = () => {
     }
   }, [isAuthenticated, userEmail]);
 
+  // Scroll function to scroll to services
+  const handleServScroll = () => {
+    const servicesSection = document.getElementById('services');
+
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+  
+  // Scroll function to scroll to images
+  const handleImgScroll = () => {
+    const imageSection = document.getElementById('images');
+
+    if (imageSection) {
+      imageSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
   const desktopNavList = (
     <ul className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-6">
       {/* Navigation Links */}
-      {['/', '/about', '/contact','/support'].map((path, index) => {
-        const linkText = path === '/' ? 'Home' : path.charAt(1).toUpperCase() + path.slice(2);
+      {['/', '#services', '/about', '/contact','/support'].map((path, index) => {
+        const linkText = path === '/' ? 'Home' : path.startsWith('#') ? path.slice(1).charAt(0).toUpperCase() + path.slice(2) : 
+        path.charAt(1).toUpperCase() + path.slice(2);
         return (
-          <li key={index}>
-            <Link
+          <ul key={index}>
+            {path === "#services" ? ( 
+            <>
+            <li ref={dropdownRef}>
+              <div
+              className='flex flex-row justify-center items-center gap-2'
+              ref={dropdownRef}
+              >
+                <Link
+                to={path === '#services' ? '/#services' : path} // Redirect to homepage if services clicked outside home
+                onClick={(e) => {
+                  if (path === '#services') {
+                    e.preventDefault();
+                    if (window.location.pathname !== '/') {
+                      navigate('/'); // Navigating to Homepage
+                      setTimeout(() => handleServScroll(), 300); // Scroll Delay
+                    }
+                    else
+                    {
+                      handleServScroll(); // Direct Scroll in homepage
+                    }
+                  }
+                }}
+                className="text-white hover:text-blue-500 active:text-purple-500 transition-all duration-300 ease-in-out"
+                >
+                  {linkText}
+                </Link>
+
+                {/* Drop Down button */}
+                <button
+                onClick={() => setIsServicesOpen(!isServicesOpen)}
+                className="text-white transition-all duration-500 ease-in-out"
+                >
+                  {isServicesOpen ? ( 
+                    <img 
+                    src="./up-arrow-lg.png" 
+                    alt="drop down arrow" 
+                    className='w-auto h-[8px] mt-[5px]'
+                    />
+                  ) : ( 
+                    <img 
+                    src="./arrow-lg.png" 
+                    alt="drop down arrow" 
+                    className='w-auto h-[8px] mt-[5px]'
+                    />
+                  )}
+                </button>
+              </div>
+
+              {/** Drop Down Menu */}
+              {isServicesOpen && (
+                <ul className="absolute right-[33vh] top-[11vh] min-w-fit bg-gray-800 shadow-lg rounded-lg grid grid-cols-2 p-1">
+                  {/** 1st Row */}
+                  <li>
+                    <Link
+                      to="/#images"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (window.location.pathname !== '/') {
+    
+                          navigate('/'); // Navigating to Homepage
+                          setTimeout(() => handleImgScroll(), 300); // Scroll Delay
+                        }
+                        else
+                        {
+                          handleImgScroll(); // Direct Scroll in homepage
+                        }
+                      }}
+                      className="block px-6 py-2 text-white text-center w-full rounded-lg hover:rounded-lg hover:bg-blue-500 transition"
+                    >
+                      Web Development
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      to="/#images"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (window.location.pathname !== '/') {
+    
+                          navigate('/'); // Navigating to Homepage
+                          setTimeout(() => handleImgScroll(), 300); // Scroll Delay
+                        }
+                        else
+                        {
+                          handleImgScroll(); // Direct Scroll in homepage
+                        }
+                      }}
+                      className="block px-6 py-2 text-white text-center w-full rounded-lg hover:rounded-lg hover:bg-blue-500 transition"
+                    >
+                      Machine Learning
+                    </Link>
+                  </li>
+
+                  {/** 2nd Row */}
+                  <li>
+                    <Link
+                      to="/#images"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (window.location.pathname !== '/') {
+    
+                          navigate('/'); // Navigating to Homepage
+                          setTimeout(() => handleImgScroll(), 300); // Scroll Delay
+                        }
+                        else
+                        {
+                          handleImgScroll(); // Direct Scroll in homepage
+                        }
+                      }}
+                      className="block px-6 py-2 text-white text-center w-full rounded-lg hover:rounded-lg hover:bg-blue-500 transition"
+                    >
+                      Data Science
+                    </Link>
+                  </li>
+                
+                  <li>
+                    <Link
+                      to="/#images"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (window.location.pathname !== '/') {
+    
+                          navigate('/'); // Navigating to Homepage
+                          setTimeout(() => handleImgScroll(), 300); // Scroll Delay
+                        }
+                        else
+                        {
+                          handleImgScroll(); // Direct Scroll in homepage
+                        }
+                      }}
+                      className="block px-6 py-2 text-white text-center w-full rounded-lg hover:rounded-lg hover:bg-blue-500 transition"
+                    >
+                      UI/UX
+                    </Link>
+                  </li>
+
+                  {/** 3rd Row */}
+                  <li>
+                    <Link
+                      to="/#images"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (window.location.pathname !== '/') {
+    
+                          navigate('/'); // Navigating to Homepage
+                          setTimeout(() => handleImgScroll(), 300); // Scroll Delay
+                        }
+                        else
+                        {
+                          handleImgScroll(); // Direct Scroll in homepage
+                        }
+                      }}
+                      className="block px-6 py-2 text-white text-center w-full rounded-lg hover:rounded-lg hover:bg-blue-500 transition"
+                    >
+                      AR/VR
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      to="/#images"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (window.location.pathname !== '/') {
+    
+                          navigate('/'); // Navigating to Homepage
+                          setTimeout(() => handleImgScroll(), 300); // Scroll Delay
+                        }
+                        else
+                        {
+                          handleImgScroll(); // Direct Scroll in homepage
+                        }
+                      }}
+                      className="block px-6 py-2 text-white text-center w-full rounded-lg hover:rounded-lg hover:bg-blue-500 transition"
+                    >
+                      App Development
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+            </> 
+            ) 
+            : 
+            ( 
+              <Link
               to={path}
-              className="text-white hover:text-blue-500 active:text-purple-500 transition-all duration-300 ease-in-out transform hover:scale-110 text-decoration-none"
-            >
-              {linkText}
-            </Link>
-          </li>
+              className="text-white hover:text-blue-500 transition-all duration-300 ease-in-out"
+              >
+                {linkText}
+              </Link>
+            )}
+          </ul>
         );
       })}
       
@@ -65,7 +302,7 @@ const Navbar = () => {
       </li>
   
       {isAuthenticated ? (
-        <li className="relative">
+        <li className="relative" ref={userDropdownRef}>
           <button
             onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
             className="text-white transition-all duration-300 ease-in-out transform hover:scale-110 hover:text-blue-500 active:text-purple-500 text-decoration-none"
@@ -79,7 +316,7 @@ const Navbar = () => {
           {isUserDropdownOpen && (
             <div className="absolute right-0 mt-4 bg-gray-800 text-white shadow-lg px-4 py-3 rounded transition duration-300 ease-in-out z-10">
               {/* Profile only */}
-              <Link to="/profile" className="text-blue-500 uppercase font-extralight hover:scale-110 hover:font-bold">
+              <Link to="/profile" className="text-blue-500 hover:text-purple-500 uppercase font-bold">
                 View Profile
               </Link>
             </div>
@@ -104,12 +341,26 @@ const Navbar = () => {
 
   const mobileNavList = (
     <ul className="flex flex-col gap-5 items-center">
-      {['/', '/about', '/contact', '/support'].map((path, index) => {
-        const linkText = path === '/' ? 'Home' : path.charAt(1).toUpperCase() + path.slice(2);
+      {['/', '#services', '/about', '/contact', '/support'].map((path, index) => {
+        const linkText = path === '/' ? 'Home' : path.startsWith('#') ? path.slice(1).charAt(0).toUpperCase() + path.slice(2) : 
+        path.charAt(1).toUpperCase() + path.slice(2);
         return (
           <li key={index}>
             <Link
-              to={path}
+              to={path === '#services' ? '/#services' : path} // Redirect to homepage if services clicked outside home
+              onClick={(e) => {
+                if (path === '#services') {
+                  e.preventDefault();
+                  if (window.location.pathname !== '/') {
+                    navigate('/');
+                    setTimeout(() => handleServScroll(), 100); // Scroll Delay
+                  }
+                  else
+                  {
+                    handleServScroll(); // Direct Scroll in homepage
+                  }
+                }
+              }}
               className="text-white hover:text-blue-500 active:text-purple-500 transition-all duration-300 ease-in-out transform hover:scale-105"
             >
               {linkText}
@@ -223,4 +474,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-      

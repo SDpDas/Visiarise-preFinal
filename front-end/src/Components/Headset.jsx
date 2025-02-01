@@ -52,11 +52,11 @@ const Headset = () => {
 
   return (
     <>
-    <div className="sm:h-[110vh] h-[100vh] bg-no-repeat bg-cover bg-gradient-to-b from-black via-black to-purple-700">
+    <div className="h-[100vh] md:h-[120vh] bg-no-repeat bg-cover bg-gradient-to-b from-black via-black to-purple-700">
 
       {/* Upper Section */}
-      <div className={`flex md:h-[20%] lg:h-[15%] relative top-44 md:relative md:top-32 justify-center items-center text-transparent bg-gradient-to-r from-blue-700 via-purple-700 to-white 
-        bg-clip-text animate-glow ${isVisible ? 'opacity-100' : 'opacity-0'} duration-400`}>
+      <div className={`flex md:h-[20%] lg:h-[15%] relative top-32 md:relative md:top-32 justify-center items-center text-transparent bg-gradient-to-r from-blue-700 via-purple-700 to-white 
+        bg-clip-text animate-glow ${isVisible ? 'opacity-100' : 'md:opacity-0 opacity-100'} duration-400`}>
         <div className="text-center text-4xl tracking-widest md:text-5xl lg:text-7xl font-sans md:tracking-wider">
           Experience the Immersive Reality
         </div>
@@ -66,11 +66,11 @@ const Headset = () => {
       <div className="flex items-center justify-center px-10 sm:px-8">
         <div
           className={`sticky top-0 flex flex-col md:flex-row justify-center items-center md:mr-40 transition-opacity duration-500
-            ${isVisible ? 'opacity-100' : 'opacity-0'} duration-300`}
+            ${isVisible ? 'opacity-100' : 'md:opacity-0 opacity-100'} duration-300`}
         >
           <motion.div
             onClick={handleClick}
-            className={`relative top-64 md:top-28 md:right-8 lg:top-28 lg:right-20 flex items-center justify-center 
+            className={`relative top-40 md:top-28 md:right-8 lg:top-28 lg:right-20 flex items-center justify-center 
             ${isAnimating ? 'cursor-pointer animate-breath sm:animate-breath-fast md:animate-breath lg:animate-breath-fast' : ''}`}
           >
             <img
@@ -118,7 +118,7 @@ const Headset = () => {
               transition: { 'type': spring, stiffness: 500, damping: 0 },
             }}
           >
-            <div className="relative top-64 sm:top-48 sm:left-1 md:top-36 md:left-1 lg:top-36 lg:right-20 lg:-left-20 sm:mt-6 md:mt-0 text-default-text sm:order-first md:order-last" onClick={handleClick}>
+            <div className="relative top-40 sm:top-48 sm:left-1 md:top-36 md:left-1 lg:top-36 lg:right-20 lg:-left-20 sm:mt-6 md:mt-0 text-default-text sm:order-first md:order-last" onClick={handleClick}>
               <button
                 className={`px-6 sm:px-8 md:px-[30px] py-3 sm:py-4 md:py-[13px] 
                 font-poppins text-bold sm:text-md md:text-[25px] text-lg bg-transparent text-white rounded-full

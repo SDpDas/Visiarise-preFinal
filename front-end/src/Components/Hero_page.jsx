@@ -17,7 +17,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden h-[100vh]">
+    <div className="relative w-full overflow-hidden h-[80vh] md:h-[100vh]">
       {/* Lazy loaded Video component */}
       <Suspense fallback={<div>Loading Video...</div>}>
         <BackgroundVideo />

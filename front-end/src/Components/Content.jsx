@@ -2,7 +2,7 @@ import { motion } from "framer-motion"; // Import Framer Motion for animations
 
 const Content = () => {
   return (
-    <div className="relative flex flex-col items-center lg:flex-row bg-gradient-to-b from-black via-purple-700 to-black py-12 px-6 lg:px-20 min-h-screen overflow-hidden">
+    <div className="relative flex flex-col items-center lg:flex-row bg-gradient-to-b from-black via-purple-700 to-black py-12 px-6 lg:px-20 min-h-[60vh] md:min-h-screen overflow-hidden">
       {/* Animated Gradient Blob */}
       <motion.div
         className="absolute top-10 left-1/4 w-72 h-72 lg:w-96 lg:h-96 bg-custom-gradient rounded-full opacity-70 filter blur-3xl"
@@ -13,7 +13,7 @@ const Content = () => {
 
       {/* Text Content */}
       <motion.div
-        className="z-10 flex-1 mt-10 lg:mt-0 lg:ml-12 text-white"
+        className="z-10 flex flex-col flex-1 sm:gap-[16px] md:gap-0 mt-10 lg:mt-0 lg:ml-12 text-white"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
